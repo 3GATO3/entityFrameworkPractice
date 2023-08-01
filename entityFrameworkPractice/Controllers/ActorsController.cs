@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using entityFrameworkPractice.DTOs;
 using entityFrameworkPractice.Entities;
 using Microsoft.AspNetCore.Http;
@@ -32,13 +33,13 @@ namespace entityFrameworkPractice.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Actor>>> Get()
         {
-            return await context.Actors.ToListAsync();
+            return await context.Actors.OrderByDescending(a => a.BirthDate ).ToListAsync();
         }
 
         [HttpGet("name")]
         public async Task<ActionResult<IEnumerable<Actor>>> Get(string name)
         {
-            return await context.Actors.Where(a => a.Name == name).ToListAsync();
+            return await context.Actors.Where(a => a.Name == name).OrderBy(a => a.Name).ThenByDescending(a=> a.BirthDate).ToListAsync();
         }
 
         [HttpGet("name/v2")]
@@ -54,6 +55,23 @@ namespace entityFrameworkPractice.Controllers
             return await context.Actors.Where(
                 a => a.BirthDate>= start && a.BirthDate<= end).ToListAsync();
         }
+
+        [HttpGet("{id:int}")]
+        //[Route("/GetById/Id")]
+        public async Task<ActionResult<Actor>> Get(int id)
+        {
+            var actor = await context.Actors.FirstOrDefaultAsync(a => a.Id == id);
+            return actor == null ? NotFound() : actor;
+        }
+
+        [HttpGet("IdAndName")]
+        public async Task<ActionResult<IEnumerable<ActorDTO>>> GetIdAndName() 
+        {
+            return await context.Actors
+                .ProjectTo<ActorDTO>(mapper.ConfigurationProvider)
+                .ToListAsync();
+        }
+
     }
 }
 

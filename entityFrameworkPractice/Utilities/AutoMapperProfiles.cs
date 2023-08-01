@@ -10,6 +10,7 @@ namespace entityFrameworkPractice.Utilities
         {
             CreateMap<GenreCreationDTO, Genre>();
             CreateMap<ActorCreationDTO, Actor>();
+            CreateMap< Actor, ActorDTO>();
             CreateMap<CommentCreationDTO, Comment>();
             CreateMap<MovieCreationDTO, Movie>().
                 ForMember(ent => ent.Genres,

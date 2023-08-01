@@ -11,6 +11,8 @@ namespace entityFrameworkPractice.Entities.Config
             var animation = new Genre { Id = 6, Name = "Animation" };
             builder.HasData(sciFi, animation);
 
+            builder.HasIndex(m=> m.Name).IsUnique();
+
         }
     }
 }
