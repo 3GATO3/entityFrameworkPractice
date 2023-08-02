@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
-using entityFrameworkPractice.DTOs;
 using entityFrameworkPractice.Entities;
+using entityFrameworkPractice.src.Application.DTOs;
+using entityFrameworkPractice.src.Domain.Entities;
 
 namespace entityFrameworkPractice.Utilities
 {

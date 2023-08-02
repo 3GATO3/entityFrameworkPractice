@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
-using entityFrameworkPractice.DTOs;
 using entityFrameworkPractice.Entities;
+using entityFrameworkPractice.src.Application.DTOs;
+using entityFrameworkPractice.src.Domain.Entities;
+using entityFrameworkPractice.src.infraestructure;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;

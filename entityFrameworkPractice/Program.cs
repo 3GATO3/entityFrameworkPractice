@@ -1,3 +1,7 @@
+using entityFrameworkPractice.Services;
+using entityFrameworkPractice.src.Application.Services;
+using entityFrameworkPractice.src.infraestructure;
+using entityFrameworkPractice.src.infraestructure.Repository;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json.Serialization;
 
@@ -23,6 +27,10 @@ namespace entityFrameworkPractice
             builder.Services.AddDbContext<ApplicationDbContext>
                 (options => options.UseSqlServer("name=DefaultConnection"));
             builder.Services.AddAutoMapper(typeof(Program));
+            builder.Services.AddScoped(typeof(Repository<>));
+            builder.Services.AddScoped<IActorService, ActorService>();
+           // builder.Services.AddScoped<ILogger>();
+            //builder.Services.AddScoped(typeof(ActorRepository<>));
 
             var app = builder.Build();
 
