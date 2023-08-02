@@ -2,7 +2,7 @@
 using entityFrameworkPractice.src.Application.DTOs;
 using Microsoft.AspNetCore.Mvc;
 
-namespace entityFrameworkPractice.src.Application.Services
+namespace entityFrameworkPractice.src.Application.Interfaces
 {
     public interface IActorService
     {

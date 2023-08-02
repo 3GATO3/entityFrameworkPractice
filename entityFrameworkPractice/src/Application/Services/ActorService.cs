@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using entityFrameworkPractice.Entities;
 using entityFrameworkPractice.src.Application.DTOs;
-using entityFrameworkPractice.src.Application.Services;
+using entityFrameworkPractice.src.Application.Interfaces;
 using entityFrameworkPractice.src.Application.Specifications;
 using entityFrameworkPractice.src.Application.Specifications.ActorSpec;
 using entityFrameworkPractice.src.infraestructure.Repository;

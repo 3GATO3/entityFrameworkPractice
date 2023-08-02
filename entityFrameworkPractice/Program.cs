@@ -1,4 +1,5 @@
 using entityFrameworkPractice.Services;
+using entityFrameworkPractice.src.Application.Interfaces;
 using entityFrameworkPractice.src.Application.Services;
 using entityFrameworkPractice.src.infraestructure.Repository;
 using entityFrameworkPractice.src.Persistence;
@@ -29,6 +30,7 @@ namespace entityFrameworkPractice
             builder.Services.AddAutoMapper(typeof(Program));
             builder.Services.AddScoped(typeof(Repository<>));
             builder.Services.AddScoped<IActorService, ActorService>();
+            builder.Services.AddScoped<ICommentService, CommentService>();
            // builder.Services.AddScoped<ILogger>();
             //builder.Services.AddScoped(typeof(ActorRepository<>));
 
