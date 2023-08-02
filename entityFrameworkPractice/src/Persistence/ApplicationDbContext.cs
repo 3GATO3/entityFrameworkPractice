@@ -3,7 +3,7 @@ using entityFrameworkPractice.Entities.Seeding;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
 
-namespace entityFrameworkPractice.src.infraestructure
+namespace entityFrameworkPractice.src.Persistence
 {
     public class ApplicationDbContext : DbContext
     {

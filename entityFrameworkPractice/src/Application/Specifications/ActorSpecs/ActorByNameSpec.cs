@@ -1,7 +1,7 @@
 ﻿using Ardalis.Specification;
 using entityFrameworkPractice.Entities;
 
-namespace entityFrameworkPractice.src.Application.Specifications
+namespace entityFrameworkPractice.src.Application.Specifications.ActorSpec
 {
     public class ActorByNameSpec : Specification<Actor>
     {

@@ -1,7 +1,7 @@
 ﻿using Ardalis.Specification;
 using entityFrameworkPractice.Entities;
 
-namespace entityFrameworkPractice.src.Application.Specifications
+namespace entityFrameworkPractice.src.Application.Specifications.ActorSpec
 {
     public class GetAllActorsSpec : Specification<Actor, string>
     {
@@ -9,10 +9,10 @@ namespace entityFrameworkPractice.src.Application.Specifications
 
         public GetAllActorsSpec()
         {
-        
-           
-                Query.Select(x=> x.Name);
-           
+
+
+            Query.Select(x => x.Name);
+
 
         }
 

@@ -5,8 +5,9 @@ using entityFrameworkPractice.Entities;
 using entityFrameworkPractice.src.Application.DTOs;
 using entityFrameworkPractice.src.Application.Services;
 using entityFrameworkPractice.src.Application.Specifications;
-using entityFrameworkPractice.src.infraestructure;
+using entityFrameworkPractice.src.Application.Specifications.ActorSpec;
 using entityFrameworkPractice.src.infraestructure.Repository;
+using entityFrameworkPractice.src.Persistence;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -19,13 +20,13 @@ namespace entityFrameworkPractice.Controllers
         private readonly ApplicationDbContext context;
         private readonly IMapper mapper;
         private readonly Repository<Actor> actorRepository;
-       // private readonly ILogger _logger;
+        // private readonly ILogger _logger;
         private readonly IActorService _actorService;
         public ActorsController(ApplicationDbContext context, IMapper mapper, Repository<Actor> actorRepository, IActorService actorService)
         {
             this.context = context;
             this.mapper = mapper;
-           // _logger = logger;
+            // _logger = logger;
             this.actorRepository = actorRepository;
             _actorService = actorService;
         }
@@ -39,19 +40,18 @@ namespace entityFrameworkPractice.Controllers
         //    return Ok();
         //}
 
-        [HttpPost("PostRepository")]
-        public async Task<ActionResult> PostRepository(ActorCreationDTO actorCreationDTO)
+        [HttpPost("PostDTO")]
+        public async Task<ActionResult> PostWithDTO(ActorCreationDTO actorCreationDTO)
         {
-            var actor = mapper.Map<Actor>(actorCreationDTO);
-            await actorRepository.AddAsync(actor);
-            await actorRepository.SaveChangesAsync();
-            return Ok();
+            var result = await _actorService.CreateWithDTO(actorCreationDTO);
+            return Ok(result);
+            
         }
 
-        [HttpPost("PostOrdenado")]
-        public async Task<Actor> PostOrdenado(string name, decimal fortune)
+        [HttpPost("PostNombreyFortuna")]
+        public async Task<Actor> PostNombreyFortuna(string name, decimal fortune)
         {
-            
+
             return await _actorService.Create(name, fortune);
         }
 
@@ -60,14 +60,16 @@ namespace entityFrameworkPractice.Controllers
         [HttpGet("GetAllArdalis/name")]
         public async Task<ActionResult> GetByNameArdalis(string name)
         {
-            var result= await actorRepository.ListAsync(new ActorByNameSpec(name));
+            var result = await _actorService.GetActorsByName(name);
+            //var result = await actorRepository.ListAsync(new ActorByNameSpec(name));
             //var result = await context.Actors.ToListAsync(new ActorByNameSpec(name));
             return Ok(result);
         }
         [HttpGet("ardalis/{id:int}")]
         public async Task<ActionResult> GetByIdArdalis(int id)
         {
-            var result = await actorRepository.ListAsync(new ActorByIdSpec(id));
+            var result= await _actorService.GetActorsById(id);
+            //var result = await actorRepository.ListAsync(new ActorByIdSpec(id));
             return Ok(result);
         }
 
@@ -75,22 +77,23 @@ namespace entityFrameworkPractice.Controllers
         [HttpGet("GetAlll")]
         public async Task<ActionResult> GetAllActors()
         {
-            var result = await actorRepository.ListAsync(new GetAllActorsSpec());
+            var result= await _actorService.GetAllActors();
+            //var result = await actorRepository.ListAsync(new GetAllActorsSpec());
             return Ok(result);
         }
 
         //repository
-        [HttpGet("GetAllReopository")]
-        public IEnumerable<Actor> GetAllv()
-        {
-            return _actorService.GetActors();
-        }
+        //[HttpGet("GetAllReopository")]
+        //public IEnumerable<Actor> GetAllv()
+        //{
+        //    return _actorService.GetActors();
+        //}
 
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Actor>>> Get()
-        {
-            return await context.Actors.OrderByDescending(a => a.BirthDate ).ToListAsync();
-        }
+        //[HttpGet]
+        //public async Task<ActionResult<IEnumerable<Actor>>> Get()
+        //{
+        //    return await context.Actors.OrderByDescending(a => a.BirthDate).ToListAsync();
+        //}
 
         //[HttpGet("name")]
         //public async Task<ActionResult<IEnumerable<Actor>>> Get(string name)
@@ -122,7 +125,7 @@ namespace entityFrameworkPractice.Controllers
         //        a => a.BirthDate>= start && a.BirthDate<= end).ToListAsync();
         //}
 
-        
+
 
         //[HttpGet("{id:int}")]
         ////[Route("/GetById/Id")]
@@ -132,12 +135,41 @@ namespace entityFrameworkPractice.Controllers
         //    return actor == null ? NotFound() : actor;
         //}
 
-        [HttpGet("IdAndName")]
-        public async Task<ActionResult<IEnumerable<ActorDTO>>> GetIdAndName() 
+        //[HttpGet("IdAndName")]
+        //public async Task<ActionResult<IEnumerable<ActorDTO>>> GetIdAndName()
+        //{
+        //    return await context.Actors
+        //        .ProjectTo<ActorDTO>(mapper.ConfigurationProvider)
+        //        .ToListAsync();
+        //}
+
+        [HttpGet("GetActorAndMovies")]
+        public async Task<List<Actor>> GetActorsAndMovies(string name)
         {
-            return await context.Actors
-                .ProjectTo<ActorDTO>(mapper.ConfigurationProvider)
-                .ToListAsync();
+            return await _actorService.GetActorAndMovies(name);
+        }
+
+        [HttpDelete]
+        public async Task<ActionResult> Delete(int id)
+        {
+            
+            var result = await _actorService.Delete(id);
+            if (result == "Not found") {
+                return NotFound();
+            }
+            return NoContent();
+        }
+
+        [HttpPut]
+        public async Task<ActionResult> Modify(int id, ActorCreationDTO actor)
+        {
+            
+           var result = await _actorService.Put(id, actor);
+            if (result  == "false")
+            {
+                return NotFound();
+            }
+            return NoContent();
         }
 
     }

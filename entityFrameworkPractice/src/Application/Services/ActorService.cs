@@ -1,8 +1,11 @@
-﻿using entityFrameworkPractice.Entities;
+﻿using AutoMapper;
+using entityFrameworkPractice.Entities;
+using entityFrameworkPractice.src.Application.DTOs;
 using entityFrameworkPractice.src.Application.Services;
 using entityFrameworkPractice.src.Application.Specifications;
-using entityFrameworkPractice.src.infraestructure;
+using entityFrameworkPractice.src.Application.Specifications.ActorSpec;
 using entityFrameworkPractice.src.infraestructure.Repository;
+using entityFrameworkPractice.src.Persistence;
 using Microsoft.AspNetCore.Mvc;
 
 namespace entityFrameworkPractice.Services
@@ -12,10 +15,12 @@ namespace entityFrameworkPractice.Services
     {
         private readonly Repository<Actor> actorRepository;
         private readonly ApplicationDbContext context;
-        public ActorService (Repository<Actor> actorRepository, ApplicationDbContext context)
+        private readonly IMapper _mapper;
+        public ActorService(Repository<Actor> actorRepository, ApplicationDbContext context, IMapper mapper)
         {
             this.actorRepository = actorRepository;
             this.context = context;
+            _mapper = mapper;
         }
 
         //with repository
@@ -24,8 +29,9 @@ namespace entityFrameworkPractice.Services
             return actorRepository.ListAsync(new ActorByNameSpec(name));
         }
 
-        public Task<List<Actor>> GetActorsById(int  id) { return actorRepository.ListAsync(
-            new ActorByIdSpec(id));}
+        public Task<List<Actor>> GetActorsById(int  id) { 
+
+            return actorRepository.ListAsync(new ActorByIdSpec(id));}
 
         public Task<List<string>> GetAllActors() 
         { return actorRepository.ListAsync(new GetAllActorsSpec()); }
@@ -45,6 +51,18 @@ namespace entityFrameworkPractice.Services
 
             await actorRepository.SaveChangesAsync();
 
+            return actor;
+        }
+        public async Task<Actor> CreateWithDTO(ActorCreationDTO actorCreationDTO)
+        {
+            var actor = _mapper.Map<Actor>(actorCreationDTO);
+
+            if (actorCreationDTO != null)
+            {
+                await actorRepository.AddAsync(actor);
+                await actorRepository.SaveChangesAsync();
+            }
+            
             return actor;
         }
 
@@ -67,6 +85,38 @@ namespace entityFrameworkPractice.Services
             var result =  await actorRepository.ListAsync(new GetByDateBirthSpec(startYear, endYear));
 
             return result;
+        }
+
+        public async Task<List<Actor>> GetActorAndMovies(string actorName)
+        {
+            var result = await actorRepository.ListAsync(new GetActorAndMoviesSpec(actorName));
+            return result;
+        }
+
+        public async Task<string> Delete(int id)
+        {
+            var actor =  await actorRepository.FirstOrDefaultAsync(new ActorByIdSpec(id)) ;
+            if (actor == null)
+            {
+                return "Not found";
+            }
+            await actorRepository.DeleteAsync(actor);
+            await actorRepository.SaveChangesAsync() ;
+            return "eliminado correctamente";
+        }
+
+        public async Task<string> Put(int id, ActorCreationDTO actorCreationDTO)
+        {
+            var actorExistente = await actorRepository.AnyAsync(new ActorByIdSpec(id));
+            if (actorExistente == false)
+            {
+                return "false";
+            }
+            var actorNuevo= _mapper.Map<Actor>(actorCreationDTO);
+            actorNuevo.Id = id;
+            await actorRepository.UpdateAsync(actorNuevo);
+            await actorRepository.SaveChangesAsync() ;
+            return "true";
         }
     }
 }

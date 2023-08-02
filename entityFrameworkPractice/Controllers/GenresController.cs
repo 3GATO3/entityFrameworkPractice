@@ -2,7 +2,7 @@
 using entityFrameworkPractice.Entities;
 using entityFrameworkPractice.src.Application.DTOs;
 using entityFrameworkPractice.src.Domain.Entities;
-using entityFrameworkPractice.src.infraestructure;
+using entityFrameworkPractice.src.Persistence;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 

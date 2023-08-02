@@ -1,7 +1,7 @@
 using entityFrameworkPractice.Services;
 using entityFrameworkPractice.src.Application.Services;
-using entityFrameworkPractice.src.infraestructure;
 using entityFrameworkPractice.src.infraestructure.Repository;
+using entityFrameworkPractice.src.Persistence;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json.Serialization;
 

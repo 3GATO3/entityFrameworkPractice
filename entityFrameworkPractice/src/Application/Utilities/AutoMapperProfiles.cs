@@ -3,15 +3,16 @@ using entityFrameworkPractice.Entities;
 using entityFrameworkPractice.src.Application.DTOs;
 using entityFrameworkPractice.src.Domain.Entities;
 
-namespace entityFrameworkPractice.Utilities
+namespace entityFrameworkPractice.src.Application.Utilities
 {
-    public class AutoMapperProfiles:Profile
+    public class AutoMapperProfiles : Profile
     {
-        public AutoMapperProfiles() 
+        public AutoMapperProfiles()
         {
             CreateMap<GenreCreationDTO, Genre>();
             CreateMap<ActorCreationDTO, Actor>();
-            CreateMap< Actor, ActorDTO>();
+            CreateMap<Actor, ActorCreationDTO>();
+            CreateMap<Actor, ActorDTO>();
             CreateMap<CommentCreationDTO, Comment>();
             CreateMap<MovieCreationDTO, Movie>().
                 ForMember(ent => ent.Genres,

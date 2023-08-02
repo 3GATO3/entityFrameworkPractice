@@ -1,4 +1,5 @@
 ﻿using Ardalis.Specification.EntityFrameworkCore;
+using entityFrameworkPractice.src.Persistence;
 
 namespace entityFrameworkPractice.src.infraestructure.Repository
 {
